@@ -83,9 +83,7 @@ public class Habitat
         if(isOrdinaryCarBorn(timeCar, probabilityCar, time))
         {
             factory = new AbstractFactoryCar();
-            Transport newTransport = factory.transportBorn((int) (Math.random() * (SIZEWINDOW - 99)),
-                    (int) (Math.random() * (SIZEWINDOW - 99)),
-                    pathToCar);
+            Transport newTransport = factory.transportBorn(60, 100, pathToCar);
             transportList.add(newTransport);
             controller.toPaint(transportList);
         }
@@ -93,9 +91,7 @@ public class Habitat
         if(isOrdinaryBikeBorn(timeBike, probabilityBike, time))
         {
             factory = new AbstractFactoryCar();
-            Transport newTransport = factory.transportBorn((int) (Math.random() * (SIZEWINDOW - 99)),
-                    (int) (Math.random() * (SIZEWINDOW - 99)),
-                    pathToBike);
+            Transport newTransport = factory.transportBorn(100, 200, pathToBike);
             transportList.add(newTransport);
             controller.toPaint(transportList);
         }
