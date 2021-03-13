@@ -5,12 +5,14 @@ import model.transport.habitat.Habitat;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.security.Key;
 
 // Окно JFrame
-public class MyFrame extends JFrame implements KeyListener
+public class MyFrame extends JFrame
 {
     JLabel timeLabel;
     int time;
@@ -21,7 +23,7 @@ public class MyFrame extends JFrame implements KeyListener
 
     public MyFrame()
     {
-        habitat = new Habitat(1, 2, 100, 50, this);
+        habitat = new Habitat(1, 2, 100, 100, this);
         myField = new MyField();
 
         // Привяжем контроллер
@@ -38,7 +40,23 @@ public class MyFrame extends JFrame implements KeyListener
         // Задаём параметры поля
         myField.setPreferredSize(new Dimension(habitat.SIZEWINDOW, habitat.SIZEWINDOW));
         add(myField);
-        addKeyListener(this);
+
+        // Добавляем клавиши для запуска в поле myField
+        // Start, кнопка B
+        AbstractAction start = new startPr();
+        KeyStroke keyStroke = KeyStroke.getKeyStroke("B");
+        InputMap inputMap = myField.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap.put(keyStroke, "startPr");
+        ActionMap actionMap = myField.getActionMap();
+        actionMap.put("startPr", start);
+
+        // Stop, кнопка E
+        AbstractAction stop = new stopPr();
+        KeyStroke keyStrokeStop = KeyStroke.getKeyStroke("E");
+        InputMap inputMapStop = myField.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap.put(keyStrokeStop, "stopPr");
+        ActionMap actionMapStop = myField.getActionMap();
+        actionMap.put("stopPr", stop);
 
         // Задаём параметры JLabel для поля времени
         timeLabel = new JLabel("",SwingConstants.CENTER);
@@ -51,6 +69,34 @@ public class MyFrame extends JFrame implements KeyListener
         setResizable(true);
     }
 
+    class startPr extends AbstractAction
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            if (!controller.isBornProcessOn())
+            {
+                myField = new MyField();
+                myField.configureController(controller);
+                controller.startBornProcess();
+            }
+        }
+    }
+
+    class stopPr extends AbstractAction
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            if (controller.isBornProcessOn())
+            {
+                controller.stopBornProcess();
+                showFinishDialog();
+                controller.refreshTransports();
+            }
+        }
+    }
+
     // Обновить таймер на экране
     public void updateTime(int time)
     {
@@ -59,34 +105,6 @@ public class MyFrame extends JFrame implements KeyListener
     }
 
     // Привязка клавиш к старт/финиш/показ таймера
-    @Override
-    public void keyTyped(KeyEvent keyEvent)
-    {
-        switch (keyEvent.getKeyCode())
-        {
-            case KeyEvent.VK_B:
-                if(!controller.isBornProcessOn())
-                {
-                    myField = new MyField();
-                    myField.configureController(controller);
-                    controller.startBornProcess();
-                }
-                break;
-
-            case KeyEvent.VK_E:
-                if(controller.isBornProcessOn())
-                {
-                    controller.stopBornProcess();
-                    showFinishDialog();
-                    controller.refreshTransports();
-                }
-                break;
-
-            case KeyEvent.VK_T:
-                timeLabel.setVisible(!timeLabel.isVisible());
-                break;
-        }
-    }
 
     public void configureController(Controller controller)
     {
@@ -104,17 +122,17 @@ public class MyFrame extends JFrame implements KeyListener
                 new Font("Serif", Font.BOLD, 16),
                 Color.BLACK);
 
-        JLabel carsLabel = createLabel("Ordinary: " + controller.getCarsAmount(),
+        JLabel carsLabel = createLabel("Car: " + controller.getCarsAmount(),
                 SwingConstants.CENTER,
                 new Font("Courier New", Font.ITALIC, 16),
                 Color.RED);
 
-        JLabel bikesLabel = createLabel("Albinos: " + controller.getBikesAmount(),
+        JLabel bikesLabel = createLabel("Bike: " + controller.getBikesAmount(),
                 SwingConstants.CENTER,
                 new Font("Times New Roman", Font.BOLD, 16),
                 Color.MAGENTA);
 
-        JLabel allTransportsCount = createLabel("All rabbits: " + controller.getAllTransportsAmount(),
+        JLabel allTransportsCount = createLabel("All transport: " + controller.getAllTransportsAmount(),
                 SwingConstants.CENTER,
                 new Font("Times New Roman", Font.ITALIC, 16),
                 Color.ORANGE);
@@ -148,9 +166,4 @@ public class MyFrame extends JFrame implements KeyListener
 
         return label;
     }
-
-    @Override
-    public void keyPressed(KeyEvent keyEvent) { }
-    @Override
-    public void keyReleased(KeyEvent keyEvent) { }
 }

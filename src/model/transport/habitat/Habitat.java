@@ -5,7 +5,6 @@ import controller.Controller;
 import model.transport.*;
 import view.MyFrame;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Timer;
 
@@ -61,14 +60,14 @@ public class Habitat
 //    }
 
     // Рандом вероятности, чтобы выяснить отображать или нет объект Car
-    boolean isOrdinaryCarBorn(int tmCar, int probCar, int time)
+    boolean isCarBorn(int tmCar, int probCar, int time)
     {
         int probability = (int)(Math.random() * 100 + 1);
         return probability <= probCar && time % tmCar == 0;
     }
 
     // Рандом вероятности, чтобы выяснить отображать или нет объект Bike
-    boolean isOrdinaryBikeBorn(int tmBike, int probBike, int time)
+    boolean isBikeBorn(int tmBike, int probBike, int time)
     {
         int probability = (int)(Math.random() * 100 + 1);
         return probability <= probBike && time % tmBike == 0;
@@ -80,7 +79,7 @@ public class Habitat
         AbstractFactory factory;
         controller.passTime(time);
 
-        if(isOrdinaryCarBorn(timeCar, probabilityCar, time))
+        if(isCarBorn(timeCar, probabilityCar, time))
         {
             factory = new AbstractFactoryCar();
             Transport newTransport = factory.transportBorn((int) (Math.random() * (SIZEWINDOW - 99)),
@@ -90,9 +89,9 @@ public class Habitat
             controller.toPaint(transportList);
         }
 
-        if(isOrdinaryBikeBorn(timeBike, probabilityBike, time))
+        if(isBikeBorn(timeBike, probabilityBike, time))
         {
-            factory = new AbstractFactoryCar();
+            factory = new AbstractFactoryBike();
             Transport newTransport = factory.transportBorn((int) (Math.random() * (SIZEWINDOW - 99)),
                     (int) (Math.random() * (SIZEWINDOW - 99)),
                     pathToBike);
