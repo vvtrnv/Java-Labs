@@ -13,14 +13,14 @@ public class Habitat
     /*
     * СВОЙСТВА ОБЪЕКТА
     * */
-    private int timeCar;
+    private int N1;
 
-    private int timeBike;
-    private int probabilityCar;
-    private int probabilityBike;
+    private int N2;
+    private int P1;
+    private int P2;
 
     // Размер окна
-    final public int SIZEWINDOW = 600;
+    final public int SIZEWINDOW = 700;
 
     // Путь к файлам
     final private String pathToCar = "src/resources/car.png";
@@ -29,6 +29,7 @@ public class Habitat
     // Список для хранения объектов и таймер
     private ArrayList<Transport> transportList = new ArrayList<>();
     private Timer timer = new Timer();
+    private int time = 0;
 
     // Состояние процесса(On/Off)
     private boolean bornProcessOn = false;
@@ -44,20 +45,12 @@ public class Habitat
     // Конструтор с параметрами
     public Habitat(int tmCar, int tmBike, int probCar, int probBike, MyFrame frame)
     {
-        this.timeCar = tmCar;
-        this.timeBike = tmBike;
-        this.probabilityCar = probCar;
-        this.probabilityBike = probBike;
+        this.N1 = tmCar;
+        this.N2 = tmBike;
+        this.P1 = probCar;
+        this.P2 = probBike;
         this.myframe = frame;
     }
-
-    // Создание рандомной координаты
-//    private Point generatePoint()
-//    {
-//        int x = (int) (Math.random() * (SIZEWINDOW - 99));
-//        int y = (int) (Math.random() * (SIZEWINDOW - 99));
-//        return new Point(x, y);
-//    }
 
     // Рандом вероятности, чтобы выяснить отображать или нет объект Car
     boolean isCarBorn(int tmCar, int probCar, int time)
@@ -78,8 +71,9 @@ public class Habitat
     {
         AbstractFactory factory;
         controller.passTime(time);
+        this.time = time;
 
-        if(isCarBorn(timeCar, probabilityCar, time))
+        if(isCarBorn(N1, P1, time))
         {
             factory = new AbstractFactoryCar();
             Transport newTransport = factory.transportBorn((int) (Math.random() * (SIZEWINDOW - 99)),
@@ -89,7 +83,7 @@ public class Habitat
             controller.toPaint(transportList);
         }
 
-        if(isBikeBorn(timeBike, probabilityBike, time))
+        if(isBikeBorn(N2, P2, time))
         {
             factory = new AbstractFactoryBike();
             Transport newTransport = factory.transportBorn((int) (Math.random() * (SIZEWINDOW - 99)),
@@ -118,6 +112,22 @@ public class Habitat
         bornProcessOn = false;
     }
 
+    // Пауза
+    public void pauseBorn()
+    {
+        timer.cancel();
+        timer.purge();
+    }
+
+    // Возобновить
+    public void resumeBorn()
+    {
+        timer = new Timer();
+        bornProcess = new BornProcess(this, time);
+        timer.schedule(bornProcess, 0, 1000);
+
+    }
+
     public void refreshTransports()
     {
         Car.numberOfCars = 0;
@@ -136,4 +146,19 @@ public class Habitat
         return bornProcessOn;
     }
 
+    public void setN1(int N1) {
+        this.N1 = N1;
+    }
+
+    public void setN2(int N2) {
+        this.N2 = N2;
+    }
+
+    public void setP1(int P1) {
+        this.P1 = P1;
+    }
+
+    public void setP2(int P2) {
+        this.P2 = P2;
+    }
 }

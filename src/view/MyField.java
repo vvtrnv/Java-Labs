@@ -15,7 +15,10 @@ public class MyField extends JPanel
     Controller controller;
 
     // Вызов конструктора JPanel
-    public MyField() { super(); }
+    public MyField() {
+        super();
+//        setBackground(Color.decode("#F0FFF0"));
+    }
 
     // Метод перерисовки
     public void paintTransport(ArrayList<Transport> trnsprts)
@@ -43,5 +46,10 @@ public class MyField extends JPanel
             else
                 g.drawImage(Bike.image, transport.getX(), transport.getY(), null);
         }
+    }
+
+    public void refreshField() {
+        transports = new ArrayList<>();
+        repaint();
     }
 }

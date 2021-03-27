@@ -18,6 +18,11 @@ public class BornProcess extends TimerTask
         this.habitat = h;
     }
 
+    public BornProcess(Habitat h, int time) {
+        this.habitat = h;
+        this.gameSec = time;
+    }
+
     @Override
     public void run()
     {

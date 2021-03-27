@@ -6,6 +6,7 @@ import model.transport.Bike;
 import model.transport.Car;
 import model.transport.Transport;
 import model.transport.habitat.Habitat;
+import view.ControlPanel;
 import view.MyField;
 import view.MyFrame;
 
@@ -16,18 +17,37 @@ public class Controller
     private MyField field;
     private Habitat habitat;
     private MyFrame frame;
+    private ControlPanel controlPanel;
 
     // Конструктор класса
-    public Controller(MyField myField, Habitat habitat, MyFrame myframe)
+    public Controller(MyField myField, Habitat habitat, MyFrame myframe, ControlPanel controlPanel)
     {
         this.field = myField;
         this.habitat = habitat;
         this.frame = myframe;
+        this.controlPanel = controlPanel;
     }
 
     public void toPaint(ArrayList<Transport> transports) { field.paintTransport(transports); }
-    public void startBornProcess() { habitat.startBorn();}
-    public void stopBornProcess() { habitat.stopBorn(); }
+
+    public void startBornProcess()
+    {
+        habitat.startBorn();
+        frame.setStartButtonProcessInMenu();
+    }
+
+    public void stopBornProcess()
+    {
+        habitat.stopBorn();
+        frame.setStopButtonProcessInMenu();
+    }
+
+    public void pauseBornProcess() {
+        habitat.pauseBorn();
+    }
+    public void resumeBornProcess() {
+        habitat.resumeBorn();
+    }
 
     public boolean isBornProcessOn() { return habitat.isBornProcessOn(); }
 
@@ -38,4 +58,75 @@ public class Controller
     public void refreshTransports() { habitat.refreshTransports(); }
 
     public void passTime(int time) { frame.updateTime(time); }
+
+
+    public void switchTimeRadioGroupState() {
+        controlPanel.switchTimeRadioGroupState();
+    }
+
+    public void turnTimeLabelOn() {
+        frame.turnTimeLabelOn();
+    }
+
+    public void turnTimeLabelOff() {
+        frame.turnTimeLabelOff();
+    }
+
+    public void switchTimeRadioGroupStateOff() {
+        controlPanel.switchTimeRadioGroupStateOff();
+    }
+
+    public void switchTimeRadioGroupStateOn() {
+        controlPanel.switchTimeRadioGroupStateOn();
+    }
+
+    public boolean isInfoDialogEnabled() {
+        return controlPanel.isInfoDialogEnabled();
+    }
+
+    public boolean showInfoDialog() { return frame.showFinishDialog();}
+
+    public void refreshField() {
+        field.refreshField();
+    }
+
+    public void setStartButtonState() {
+        controlPanel.setStartButtonEnabled();
+    }
+
+    public void setStopButtonState() {
+        controlPanel.setStopButtonEnabled();
+    }
+
+    public void switchInfoRadioButtonState() {
+        controlPanel.switchInfoRadioGroupState();
+    }
+
+    public void switchDialogRadioButtonState() {
+        frame.switchDialogRadioButtonState();
+    }
+
+    public void setN1(int N1) {
+        habitat.setN1(N1);
+        controlPanel.setN1(N1);
+        frame.setN1(N1);
+    }
+
+    public void setN2(int N2) {
+        habitat.setN2(N2);
+        controlPanel.setN2(N2);
+        frame.setN2(N2);
+    }
+
+    public void setP1(int P1) {
+        habitat.setP1(P1);
+        controlPanel.setP1(P1);
+        frame.setP1(P1);
+    }
+
+    public void setP2(int P2) {
+        habitat.setP2(P2);
+        controlPanel.setP2(P2);
+        frame.setP2(P2);
+    }
 }
