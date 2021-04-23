@@ -2,6 +2,7 @@ package controller;
 
 // Данный класс служит для общения между пакетами model и view
 
+import model.TransportStorage;
 import model.transport.Bike;
 import model.transport.Car;
 import model.transport.Transport;
@@ -10,7 +11,11 @@ import view.ControlPanel;
 import view.MyField;
 import view.MyFrame;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.TreeMap;
 
 public class Controller
 {
@@ -18,6 +23,8 @@ public class Controller
     private Habitat habitat;
     private MyFrame frame;
     private ControlPanel controlPanel;
+
+
 
     // Конструктор класса
     public Controller(MyField myField, Habitat habitat, MyFrame myframe, ControlPanel controlPanel)
@@ -106,6 +113,22 @@ public class Controller
         frame.switchDialogRadioButtonState();
     }
 
+    public void showTransportsList()
+    {
+        JPanel panel = new JPanel(new GridLayout(1,1));
+        JTextArea area = new JTextArea(6, 25);
+        area.setEditable(false);
+        HashSet<String> aliveTransports = TransportStorage.getInstance().getAliveTransport();
+        TreeMap<String, Integer> transportBornTime = TransportStorage.getInstance().getTransportBornTime();
+        for(String uuid : aliveTransports)
+        {
+            int bornTime = transportBornTime.get(uuid);
+            area.append("ID: " + uuid + " Born time: " + bornTime + "\n" );
+        }
+        panel.add(area);
+        JOptionPane.showMessageDialog(null, new JScrollPane(panel) , "Transports", JOptionPane.INFORMATION_MESSAGE);
+    }
+
     public void setN1(int N1) {
         habitat.setN1(N1);
         controlPanel.setN1(N1);
@@ -128,5 +151,16 @@ public class Controller
         habitat.setP2(P2);
         controlPanel.setP2(P2);
         frame.setP2(P2);
+    }
+
+    public void setD1(int D1) {
+        habitat.setD1(D1);
+        controlPanel.setD1(D1);
+
+    }
+    public void setD2(int D2) {
+        habitat.setD2(D2);
+        controlPanel.setD2(D2);
+
     }
 }

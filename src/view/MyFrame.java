@@ -12,12 +12,16 @@ import java.awt.event.MouseEvent;
 // Окно JFrame
 public class MyFrame extends JFrame
 {
-    final private int N1 = 1;
-    final private int N2 = 2;
+    final private int N1 = 3;
+    final private int N2 = 5;
     final private int P1 = 50;
     final private int P2 = 100;
     final private int controlPanelSize = 600;
     int time;
+
+    // Время жизни объекта
+    private int D1 = 5;
+    private int D2 = 10;
 
     Habitat habitat;
     Controller controller;
@@ -44,13 +48,11 @@ public class MyFrame extends JFrame
     private JMenu carProbability;
     private JMenu bikeProbability;
 
-
-
     public MyFrame()
     {
-        habitat = new Habitat(1, 2, 100, 100, this);
+        habitat = new Habitat(1, 2, 100, 100, this, D1, D2);
         myField = new MyField();
-        controlPanel = new ControlPanel(N1, N2, P1, P2);
+        controlPanel = new ControlPanel(N1, N2, P1, P2, D1, D2);
 
         // Привяжем контроллер
         controller = new Controller(myField, habitat, this, controlPanel);
@@ -61,7 +63,7 @@ public class MyFrame extends JFrame
         // Задаём параметры окна
         setTitle("Transports");
         setPreferredSize(new Dimension(habitat.SIZEWINDOW + controlPanelSize,
-                habitat.SIZEWINDOW + controlPanelSize));
+                habitat.SIZEWINDOW));
         setLayout(new BorderLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setFocusable(true);

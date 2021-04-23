@@ -28,9 +28,9 @@ public class Bike extends Transport
      * и передаёт туда параметры.
      * Так же увеличивает кол-во мотоциклов и транспорта в целом.
      */
-    Bike(int X, int Y, String path)
+    Bike(int X, int Y, String path, int birthTime, int deathTime)
     {
-        super(X, Y, path);
+        super(X, Y, path, birthTime, deathTime);
         numberOfBikes++;
         countAllTransports++;
     }

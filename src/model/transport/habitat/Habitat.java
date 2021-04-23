@@ -2,6 +2,7 @@ package model.transport.habitat;
 
 import bornProcess.BornProcess;
 import controller.Controller;
+import model.TransportStorage;
 import model.transport.*;
 import view.MyFrame;
 
@@ -19,15 +20,19 @@ public class Habitat
     private int P1;
     private int P2;
 
+    // ЛР3. время жизни объекта
+    private int D1;
+    private int D2;
+
     // Размер окна
-    final public int SIZEWINDOW = 700;
+    final public int SIZEWINDOW = 800;
 
     // Путь к файлам
     final private String pathToCar = "src/resources/car.png";
     final private String pathToBike = "src/resources/bike.png";
 
     // Список для хранения объектов и таймер
-    private ArrayList<Transport> transportList = new ArrayList<>();
+
     private Timer timer = new Timer();
     private int time = 0;
 
@@ -43,12 +48,16 @@ public class Habitat
     * */
 
     // Конструтор с параметрами
-    public Habitat(int tmCar, int tmBike, int probCar, int probBike, MyFrame frame)
+    public Habitat(int tmCar, int tmBike, int probCar, int probBike, MyFrame frame, int D1, int D2)
     {
         this.N1 = tmCar;
         this.N2 = tmBike;
         this.P1 = probCar;
         this.P2 = probBike;
+
+        this.D1 = D1;
+        this.D2 = D2;
+
         this.myframe = frame;
     }
 
@@ -70,6 +79,7 @@ public class Habitat
     public void update(int time)
     {
         AbstractFactory factory;
+        TransportStorage storage = TransportStorage.getInstance();
         controller.passTime(time);
         this.time = time;
 
@@ -78,9 +88,11 @@ public class Habitat
             factory = new AbstractFactoryCar();
             Transport newTransport = factory.transportBorn((int) (Math.random() * (SIZEWINDOW - 99)),
                     (int) (Math.random() * (SIZEWINDOW - 99)),
-                    pathToCar);
-            transportList.add(newTransport);
-            controller.toPaint(transportList);
+                    pathToCar , time, time + D1);
+            storage.getTransportsList().add(newTransport);
+            storage.getAliveTransport().add(newTransport.getUuid());
+            storage.getTransportBornTime().put(newTransport.getUuid(), newTransport.getBirthTime());
+
         }
 
         if(isBikeBorn(N2, P2, time))
@@ -88,10 +100,16 @@ public class Habitat
             factory = new AbstractFactoryBike();
             Transport newTransport = factory.transportBorn((int) (Math.random() * (SIZEWINDOW - 99)),
                     (int) (Math.random() * (SIZEWINDOW - 99)),
-                    pathToBike);
-            transportList.add(newTransport);
-            controller.toPaint(transportList);
+                    pathToBike, time, time + D2);
+            storage.getTransportsList().add(newTransport);
+            storage.getAliveTransport().add(newTransport.getUuid());
+            storage.getTransportBornTime().put(newTransport.getUuid(), newTransport.getBirthTime());
+
         }
+
+
+        storage.removeTransport(time);
+        controller.toPaint(storage.getTransportsList());
     }
 
     // Начало симуляции
@@ -108,7 +126,7 @@ public class Habitat
         timer.purge();
         timer = new Timer();
         bornProcess = new BornProcess(this);
-        transportList = new ArrayList<>();
+        TransportStorage.getInstance().reset();
         bornProcessOn = false;
     }
 
@@ -160,5 +178,13 @@ public class Habitat
 
     public void setP2(int P2) {
         this.P2 = P2;
+    }
+
+    public void setD1(int D1) {
+        this.D1 = D1;
+    }
+
+    public void setD2(int D2) {
+        this.D2 = D2;
     }
 }

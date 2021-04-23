@@ -28,9 +28,9 @@ public class Car extends Transport
      * и передаёт туда параметры.
      * Так же увеличивает кол-во машин и транспорта в целом.
      */
-    Car(int X, int Y, String path)
+    Car(int X, int Y, String path, int birthTime, int deathTime)
     {
-        super(X, Y, path);
+        super(X, Y, path, birthTime, deathTime);
         numberOfCars++;
         countAllTransports++;
     }

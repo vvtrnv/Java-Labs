@@ -22,6 +22,7 @@ public class ControlPanel extends JPanel
     // Кнопки
     private JButton startButton = new JButton("Start");
     private JButton stopButton = new JButton("Stop");
+    private JButton aliveTransportButton = new JButton("Show transports list");
 
     // Переключатели
     private JRadioButton timeOnRadioButton;
@@ -31,6 +32,9 @@ public class ControlPanel extends JPanel
     // Текстовые
     private JTextField carGenPeriodTextField;
     private JTextField bikeGenPeriodTextField;
+
+    private JTextField carDeathTimeTextField;
+    private JTextField bikeDeathTimeTextField;
 
     // ComboBox
     private JComboBox<Integer> carProbabilityComboBox;
@@ -49,7 +53,7 @@ public class ControlPanel extends JPanel
 
     /* Методы */
 
-    ControlPanel(int N1, int N2, int P1, int P2)
+    ControlPanel(int N1, int N2, int P1, int P2, int D1, int D2)
     {
         super();
         setLayout(new GridLayout(4, 1));
@@ -57,8 +61,8 @@ public class ControlPanel extends JPanel
 
         configureButtonsPanel();
         configureTimePanel();
-        configureCarPanel(N1,P1);
-        configureBikePanel(N2, P2);
+        configureCarPanel(N1,P1, D1);
+        configureBikePanel(N2, P2, D2);
     }
 
     // Установка названия панели
@@ -84,6 +88,7 @@ public class ControlPanel extends JPanel
         stopButton.setEnabled(false);
         startButton.setFocusable(false);
         stopButton.setFocusable(false);
+        aliveTransportButton.setFocusable(false);
 
         // Расположение кнопки Start
         c.gridx = 0; c.gridy = 0;
@@ -94,6 +99,12 @@ public class ControlPanel extends JPanel
         c.gridx = 0; c.gridy = 1;
         c.ipadx = 50;
         buttonsPanel.add(stopButton, c);
+
+        // Расположение кнопки Show Transports
+        c.gridx = 0;
+        c.gridy = 2;
+        c.ipadx = 50;
+        buttonsPanel.add(aliveTransportButton, c);
 
         setBorder(buttonsPanel, "SIMULATION CONTROL");
 
@@ -131,6 +142,11 @@ public class ControlPanel extends JPanel
                 controller.stopBornProcess();
                 controller.refreshTransports();
             }
+        });
+
+        aliveTransportButton.addActionListener(actionEvent->
+        {
+            controller.showTransportsList();
         });
     }
 
@@ -182,7 +198,7 @@ public class ControlPanel extends JPanel
     }
 
     // Панель настройки поведения объектов машин
-    private void configureCarPanel(int N1, int P1)
+    private void configureCarPanel(int N1, int P1, int D1)
     {
         carPanel = new JPanel(new GridBagLayout());
         setBorder(carPanel, "CAR");
@@ -250,14 +266,58 @@ public class ControlPanel extends JPanel
         });
         carPanel.add(carGenPeriodTextField, c);
 
+        // Текстовое поле с временем жизни
+        carDeathTimeTextField = new JTextField();
+        carDeathTimeTextField.setText(String.valueOf(D1));
+        c.gridx = 1;
+        c.gridy = 2;
+        c.ipadx = 75;
+
+        // Поставить в фокус при нажатии на текстовое поле
+        carDeathTimeTextField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                setFocusable(true);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                setFocusable(true);
+            }
+        });
+
+        // Обработка введенного времени жизни
+        carDeathTimeTextField.addActionListener(act->
+        {
+            if(!carDeathTimeTextField.getText().isEmpty())
+            {
+                try
+                {
+                    controller.setD1(Integer.parseInt(carDeathTimeTextField.getText()));
+                }
+                catch(NumberFormatException b)
+                {
+                    carDeathTimeTextField.setText(String.valueOf(D1));
+                    JOptionPane.showMessageDialog(null,
+                            "You have set wrong parameters :(",
+                            "Warning: wrong parameters",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+        carPanel.add(carDeathTimeTextField, c);
+
         JLabel probabilityLabel = new JLabel("Probability (%):");
         c.gridx = 0; c.gridy = 0;
         carPanel.add(probabilityLabel, c);
 
         JLabel periodLabel = new JLabel("Generation period (sec):");
-        c.gridx = 0;
-        c.gridy = 1;
+        c.gridx = 0; c.gridy = 1;
         carPanel.add(periodLabel, c);
+
+        JLabel deathLabel = new JLabel("Death time (sec): ");
+        c.gridx = 0; c.gridy = 2;
+        carPanel.add(deathLabel, c);
 
         carPanel.setVisible(true);
         carPanel.setFocusable(false);
@@ -265,7 +325,7 @@ public class ControlPanel extends JPanel
         add(carPanel);
     }
 
-    private void configureBikePanel(int N2, int P2)
+    private void configureBikePanel(int N2, int P2, int D2)
     {
         bikePanel = new JPanel(new GridBagLayout());
         setBorder(bikePanel, "BIKE");
@@ -331,13 +391,58 @@ public class ControlPanel extends JPanel
         });
         bikePanel.add(bikeGenPeriodTextField, c);
 
-        JLabel probabilityLabel = new JLabel("Probability (%):");
+        // Текстовое поле со временем жизни
+        bikeDeathTimeTextField = new JTextField();
+        bikeDeathTimeTextField.setText(String.valueOf(D2));
+        c.gridx = 1;
+        c.gridy = 2;
+        c.ipadx = 75;
+
+        // Делаем фокус при нажатии на поле
+        bikeDeathTimeTextField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                setFocusable(true);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                setFocusable(true);
+            }
+        });
+
+        // Обработка введенных данных
+        bikeDeathTimeTextField.addActionListener(act->
+        {
+            if(!bikeDeathTimeTextField.getText().isEmpty())
+            {
+                try
+                {
+                    controller.setD2(Integer.parseInt(bikeDeathTimeTextField.getText()));
+                }
+                catch (NumberFormatException e)
+                {
+                    bikeDeathTimeTextField.setText(String.valueOf(D2));
+                    JOptionPane.showMessageDialog(null,
+                            "You have set wrong parameters :(",
+                            "Warning: wrong parameters",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+        bikePanel.add(bikeDeathTimeTextField, c);
+
+        JLabel probabilityLabel = new JLabel("Probability (%): ");
         c.gridx = 0; c.gridy = 0;
         bikePanel.add(probabilityLabel, c);
 
-        JLabel periodLabel = new JLabel("Generation period (sec):");
+        JLabel periodLabel = new JLabel("Generation period (sec): ");
         c.gridx = 0; c.gridy = 1;
         bikePanel.add(periodLabel, c);
+
+        JLabel deathLabel = new JLabel("Death time (sec): ");
+        c.gridx =0; c.gridy = 2;
+        bikePanel.add(deathLabel, c);
 
         bikePanel.setVisible(true);
         bikePanel.setFocusable(false);
@@ -411,6 +516,14 @@ public class ControlPanel extends JPanel
     public void setP2(int P2)
     {
         bikeProbabilityComboBox.setSelectedIndex(Arrays.asList(probabilitiesArray).indexOf(P2));
+    }
+
+    public void setD1(int D1) {
+        carDeathTimeTextField.setText(String.valueOf(D1));
+    }
+
+    public void setD2(int D2) {
+        bikeDeathTimeTextField.setText(String.valueOf(D2));
     }
 }
 

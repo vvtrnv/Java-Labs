@@ -9,5 +9,5 @@ import model.transport.Transport;
 */
 public interface AbstractFactory
 {
-    Transport transportBorn(int X, int Y, String path);
+    Transport transportBorn(int X, int Y, String path, int birthTime, int deathTime);
 }
