@@ -9,6 +9,7 @@ public class Car extends Transport
 {
     public static int numberOfCars = 0;
     static public Image image;
+    private int routeX = 1;
 
     // Запуск единоразового присвоения картинки объектам Car
     static
@@ -33,5 +34,17 @@ public class Car extends Transport
         super(X, Y, path, birthTime, deathTime);
         numberOfCars++;
         countAllTransports++;
+    }
+
+    public void move(int speed)
+    {
+        int carX = getX();
+        if(carX + speed > 800)
+            routeX = -1;
+
+        if(carX - speed < 0)
+            routeX = 1;
+
+        this.setX(carX + speed * routeX);
     }
 }

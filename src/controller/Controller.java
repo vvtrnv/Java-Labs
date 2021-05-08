@@ -7,6 +7,8 @@ import model.transport.Bike;
 import model.transport.Car;
 import model.transport.Transport;
 import model.transport.habitat.Habitat;
+import model.transport.moveAI.BikeAI;
+import model.transport.moveAI.CarAI;
 import view.ControlPanel;
 import view.MyField;
 import view.MyFrame;
@@ -24,7 +26,8 @@ public class Controller
     private MyFrame frame;
     private ControlPanel controlPanel;
 
-
+    private CarAI carAI;
+    private BikeAI bikeAI;
 
     // Конструктор класса
     public Controller(MyField myField, Habitat habitat, MyFrame myframe, ControlPanel controlPanel)
@@ -33,6 +36,12 @@ public class Controller
         this.habitat = habitat;
         this.frame = myframe;
         this.controlPanel = controlPanel;
+
+        this.carAI = new CarAI();
+        carAI.start();
+
+        this.bikeAI = new BikeAI();
+        bikeAI.start();
     }
 
     public void toPaint(ArrayList<Transport> transports) { field.paintTransport(transports); }
@@ -77,6 +86,52 @@ public class Controller
 
     public void turnTimeLabelOff() {
         frame.turnTimeLabelOff();
+    }
+
+    // Включение и остановка потока передвижения для Car
+    public void turnCarAIOn()
+    {
+        if(!carAI.isAIActive())
+        {
+            try
+            {
+                carAI.startAI();
+                carAI.wait();
+            }
+            catch (Exception eInterrupted)
+            {
+                System.out.println("Error in Controller.turnCarAIOn");
+            }
+        }
+    }
+
+    public void turnCarAIOff()
+    {
+        if(carAI.isAIActive())
+            carAI.stopAI();
+    }
+
+    // Включение и остановка потока передвижения для Bike
+    public void turnBikeAIOn()
+    {
+        if(!bikeAI.isAIActive())
+        {
+            try
+            {
+                bikeAI.startAI();
+                bikeAI.wait();
+            }
+            catch (Exception eInterrupted)
+            {
+                System.out.println("Error in Controller.turnBikeAIOn");
+            }
+        }
+    }
+
+    public void turnBikeAIOff()
+    {
+        if(bikeAI.isAIActive())
+            bikeAI.stopAI();
     }
 
     public void switchTimeRadioGroupStateOff() {
@@ -129,6 +184,16 @@ public class Controller
         JOptionPane.showMessageDialog(null, new JScrollPane(panel) , "Transports", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    public void changeCarPriority(int priority)
+    {
+        carAI.setAIPriority(priority);
+    }
+
+    public void changeBikePriority(int priority)
+    {
+        bikeAI.setAIPriority(priority);
+    }
+
     public void setN1(int N1) {
         habitat.setN1(N1);
         controlPanel.setN1(N1);
@@ -156,11 +221,10 @@ public class Controller
     public void setD1(int D1) {
         habitat.setD1(D1);
         controlPanel.setD1(D1);
-
     }
     public void setD2(int D2) {
         habitat.setD2(D2);
         controlPanel.setD2(D2);
-
     }
+
 }

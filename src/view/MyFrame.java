@@ -12,11 +12,11 @@ import java.awt.event.MouseEvent;
 // Окно JFrame
 public class MyFrame extends JFrame
 {
-    final private int N1 = 3;
+    final private int N1 = 2;
     final private int N2 = 5;
-    final private int P1 = 50;
+    final private int P1 = 100;
     final private int P2 = 100;
-    final private int controlPanelSize = 600;
+    final private int controlPanelSize = 500;
     int time;
 
     // Время жизни объекта

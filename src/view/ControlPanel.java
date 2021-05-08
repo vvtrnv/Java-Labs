@@ -29,6 +29,12 @@ public class ControlPanel extends JPanel
     private JRadioButton timeOffRadioButton;
     private JRadioButton dialogRadioButton;
 
+    private JRadioButton carAIRadioButtonOn;
+    private JRadioButton carAIRadioButtonOff;
+
+    private JRadioButton bikeAIRadioButtonOn;
+    private JRadioButton bikeAIRadioButtonOff;
+
     // Текстовые
     private JTextField carGenPeriodTextField;
     private JTextField bikeGenPeriodTextField;
@@ -40,11 +46,20 @@ public class ControlPanel extends JPanel
     private JComboBox<Integer> carProbabilityComboBox;
     private JComboBox<Integer> bikeProbabilityComboBox;
 
+    private JComboBox<Integer> carPriorityComboBox;
+    private JComboBox<Integer> bikePriorityComboBox;
+
     // Массив вероятностей для ComboBox
     final private Integer[] probabilitiesArray =
             {
-              0, 10, 20, 30, 40, 50,
-              60, 70, 80, 90, 100
+                    0, 10, 20, 30, 40, 50,
+                    60, 70, 80, 90, 100
+            };
+
+    final private Integer[] prioritiesArray =
+            {
+                    1, 2, 3, 4, 5,
+                    6, 7, 8, 9, 10
             };
 
     // Контроллер
@@ -212,9 +227,20 @@ public class ControlPanel extends JPanel
         {
             controller.setP1(carProbabilityComboBox.getItemAt(carProbabilityComboBox.getSelectedIndex()));
         });
-
         c.gridx = 1; c.gridy = 0;
         carPanel.add(carProbabilityComboBox, c);
+
+        carPriorityComboBox = new JComboBox<>(prioritiesArray);
+        carPriorityComboBox.setSelectedIndex(Arrays.asList(prioritiesArray).indexOf(5));
+        carPriorityComboBox.setFocusable(false);
+        carPriorityComboBox.addActionListener(actionEvent ->
+        {
+            controller.changeCarPriority(carPriorityComboBox.
+                    getItemAt(carPriorityComboBox.getSelectedIndex()));
+        });
+        c.gridx = 1;
+        c.gridy = 4;
+        carPanel.add(carPriorityComboBox, c);
 
         // Текстовое поле со временем
         carGenPeriodTextField = new JTextField();
@@ -307,6 +333,36 @@ public class ControlPanel extends JPanel
         });
         carPanel.add(carDeathTimeTextField, c);
 
+        // JRadioButton для включения AI Mode
+        carAIRadioButtonOn = new JRadioButton("AI Mode ON", true);
+        carAIRadioButtonOn.addActionListener(action->
+        {
+            carAIRadioButtonOn.setSelected(true);
+            carAIRadioButtonOff.setSelected(false);
+            controller.turnCarAIOn();
+        });
+        carAIRadioButtonOn.setFocusable(false);
+        carAIRadioButtonOn.setFocusPainted(false);
+        c.gridx = 0;
+        c.gridy = 3;
+        carPanel.add(carAIRadioButtonOn, c);
+
+        // JRadioButton для выключения AI Mode
+        carAIRadioButtonOff = new JRadioButton("AI Mode OFF", true);
+        carAIRadioButtonOff.setSelected(false);
+        carAIRadioButtonOff.addActionListener(action->
+        {
+            carAIRadioButtonOff.setSelected(true);
+            carAIRadioButtonOn.setSelected(false);
+            controller.turnCarAIOff();
+        });
+        carAIRadioButtonOff.setFocusable(false);
+        carAIRadioButtonOff.setFocusPainted(false);
+        c.gridx = 1;
+        c.gridy = 3;
+        carPanel.add(carAIRadioButtonOff, c);
+
+        // Добавление JLabel
         JLabel probabilityLabel = new JLabel("Probability (%):");
         c.gridx = 0; c.gridy = 0;
         carPanel.add(probabilityLabel, c);
@@ -318,6 +374,11 @@ public class ControlPanel extends JPanel
         JLabel deathLabel = new JLabel("Death time (sec): ");
         c.gridx = 0; c.gridy = 2;
         carPanel.add(deathLabel, c);
+
+        JLabel priorityLabel = new JLabel("Priority: ");
+        c.gridx = 0;
+        c.gridy = 4;
+        carPanel.add(priorityLabel, c);
 
         carPanel.setVisible(true);
         carPanel.setFocusable(false);
@@ -341,6 +402,19 @@ public class ControlPanel extends JPanel
         });
         c.gridx = 1; c.gridy = 0;
         bikePanel.add(bikeProbabilityComboBox, c);
+
+        // ComboBox для выбора приоритета
+        bikePriorityComboBox = new JComboBox<>(prioritiesArray);
+        bikePriorityComboBox.setSelectedIndex(Arrays.asList(prioritiesArray).indexOf(4));
+        bikePriorityComboBox.setFocusable(false);
+        bikePriorityComboBox.addActionListener(actionEvent ->
+        {
+            controller.changeBikePriority(bikePriorityComboBox.
+                    getItemAt(bikePriorityComboBox.getSelectedIndex()));
+        });
+        c.gridx = 1;
+        c.gridy = 4;
+        bikePanel.add(bikePriorityComboBox, c);
 
         // Добавляем текстовое поле для ввода промежутка появления мотоциклов
         bikeGenPeriodTextField = new JTextField();
@@ -432,6 +506,36 @@ public class ControlPanel extends JPanel
         });
         bikePanel.add(bikeDeathTimeTextField, c);
 
+        // JRadioButton для включения AI Mode
+        bikeAIRadioButtonOn = new JRadioButton("AI Mode ON", true);
+        bikeAIRadioButtonOn.addActionListener(action->
+        {
+            bikeAIRadioButtonOn.setSelected(true);
+            bikeAIRadioButtonOff.setSelected(false);
+            controller.turnBikeAIOn();
+        });
+        bikeAIRadioButtonOn.setFocusable(false);
+        bikeAIRadioButtonOn.setFocusPainted(false);
+        c.gridx = 0;
+        c.gridy = 3;
+        bikePanel.add(bikeAIRadioButtonOn, c);
+
+        // JRadioButton для выключения AI Mode
+        bikeAIRadioButtonOff = new JRadioButton("AI Mode OFF", true);
+        bikeAIRadioButtonOff.setSelected(false);
+        bikeAIRadioButtonOff.addActionListener(action->
+        {
+            bikeAIRadioButtonOff.setSelected(true);
+            bikeAIRadioButtonOn.setSelected(false);
+            controller.turnBikeAIOff();
+        });
+        bikeAIRadioButtonOff.setFocusable(false);
+        bikeAIRadioButtonOn.setFocusPainted(false);
+        c.gridx = 1;
+        c.gridy = 3;
+        bikePanel.add(bikeAIRadioButtonOff, c);
+
+        // Добавление JLabel
         JLabel probabilityLabel = new JLabel("Probability (%): ");
         c.gridx = 0; c.gridy = 0;
         bikePanel.add(probabilityLabel, c);
@@ -443,6 +547,11 @@ public class ControlPanel extends JPanel
         JLabel deathLabel = new JLabel("Death time (sec): ");
         c.gridx =0; c.gridy = 2;
         bikePanel.add(deathLabel, c);
+
+        JLabel priorityLabel = new JLabel("Priority: ");
+        c.gridx = 0;
+        c.gridy = 4;
+        bikePanel.add(priorityLabel, c);
 
         bikePanel.setVisible(true);
         bikePanel.setFocusable(false);

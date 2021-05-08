@@ -9,6 +9,7 @@ public class Bike extends Transport
 {
     public static int numberOfBikes = 0;
     static public Image image;
+    private int routeY = 1;
 
     // Запуск единоразового присвоения картинки объектам Car
     static
@@ -34,4 +35,17 @@ public class Bike extends Transport
         numberOfBikes++;
         countAllTransports++;
     }
+
+    public void move(int speed)
+    {
+        int bikeY = this.getY();
+        if(bikeY + speed > 700)
+            routeY = -1;
+
+        if(bikeY - speed < 0)
+            routeY = 1;
+
+        this.setY(bikeY + speed * routeY);
+    }
+
 }
