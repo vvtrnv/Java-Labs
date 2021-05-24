@@ -194,6 +194,12 @@ public class Controller
         bikeAI.setAIPriority(priority);
     }
 
+    public void reduceBikeAmount(int percentage)
+    {
+        TransportStorage.getInstance().reduceBikeAmount(percentage);
+    }
+
+
     public void setN1(int N1) {
         habitat.setN1(N1);
         controlPanel.setN1(N1);

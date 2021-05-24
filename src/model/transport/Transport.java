@@ -41,6 +41,15 @@ public abstract class Transport implements IBehaviour
         return deathTime;
     }
 
+    public void setBirthTime(int birthTime)
+    {
+        this.birthTime = birthTime;
+    }
+
+    public void setDeathTime(int deathTime)
+    {
+        this.deathTime = deathTime;
+    }
     // Переопределение функций из интерфейса
     @Override
     public int getX() { return this.x; }

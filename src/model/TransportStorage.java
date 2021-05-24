@@ -62,6 +62,49 @@ public class TransportStorage
         }
     }
 
+    public void setAllTransports(ArrayList<Transport> transports)
+    {
+        transportsList.addAll(transports);
+        Car.numberOfCars = 0;
+        Bike.numberOfBikes = 0;
+        Transport.countAllTransports = 0;
+
+        for(int i = 0; i < transportsList.size(); i++)
+        {
+            Transport trnspt = transportsList.get(i);
+            Transport.countAllTransports++;
+            if(trnspt instanceof Car)
+                Car.numberOfCars++;
+            else
+                Bike.numberOfBikes++;
+
+            aliveTransport.add(trnspt.getUuid());
+            transportBornTime.put(trnspt.getUuid(), trnspt.getBirthTime());
+        }
+    }
+
+    public void reduceBikeAmount(int percentage)
+    {
+        int bikeToDie = (int) ((double) Bike.numberOfBikes / 100 * percentage);
+        Bike.numberOfBikes--;
+
+        while(bikeToDie != 0)
+        {
+            Bike bike = (Bike) transportsList.stream()
+                    .filter(transport -> transport instanceof  Bike)
+                    .findFirst()
+                    .orElse(null);
+
+            transportsList.remove(bike);
+            if(bike != null)
+            {
+                aliveTransport.remove(bike.getUuid());
+                transportBornTime.remove(bike.getUuid());
+            }
+            bikeToDie--;
+        }
+    }
+
     // Геттеры
     public ArrayList<Transport> getTransportsList() {
         return transportsList;

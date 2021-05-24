@@ -14,15 +14,14 @@ public class Habitat
     /*
     * СВОЙСТВА ОБЪЕКТА
     * */
-    private int N1;
-
-    private int N2;
-    private int P1;
-    private int P2;
+    private static int N1;
+    private static int  N2;
+    private static int P1;
+    private static int P2;
 
     // ЛР3. время жизни объекта
-    private int D1;
-    private int D2;
+    private static int D1;
+    private static int D2;
 
     // Размер окна
     final public int SIZEWINDOW = 800;
@@ -34,7 +33,7 @@ public class Habitat
     // Список для хранения объектов и таймер
 
     private Timer timer = new Timer();
-    private int time = 0;
+    private static int time = 0;
 
     // Состояние процесса(On/Off)
     private boolean bornProcessOn = false;
@@ -184,7 +183,19 @@ public class Habitat
         this.D1 = D1;
     }
 
-    public void setD2(int D2) {
-        this.D2 = D2;
-    }
+    public void setD2(int D2) { this.D2 = D2; }
+
+    public static int getN1() { return N1; }
+
+    public static int getN2() { return N2; }
+
+    public static int getP1() { return P1; }
+
+    public static int getP2() { return P2; }
+
+    public static int getD1() { return D1; }
+
+    public static int getD2() { return D2; }
+    public static int getGameTime() { return time; }
+
 }
