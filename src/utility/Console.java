@@ -13,8 +13,8 @@ public class Console extends JDialog
 {
     private JTextArea textArea = new JTextArea();       // отображение текста команд
     private JTextField textField = new JTextField();    // поле ввода команд
-    private String text =  "Здесь можно уменьшить кол-во мотоциклов\n" +
-                           "Введите параметр N, где N - процент уменьшения.\n";
+    private String text =  "    >Здесь можно уменьшить кол-во мотоциклов\n" +
+                           "    >Введите параметр N, где N - процент уменьшения.\n";
     private Controller controller;  // Контроллер
 
     public Console(JFrame owner, Controller controller)
@@ -33,10 +33,10 @@ public class Console extends JDialog
 
         setLayout(new FlowLayout(FlowLayout.CENTER));
         JScrollPane scrollPane = new JScrollPane(textArea);
-        scrollPane.setPreferredSize(new Dimension(490, 420));
+        scrollPane.setPreferredSize(new Dimension(480, 420));
         add(scrollPane);
 
-        textField.setPreferredSize(new Dimension(495, 25));
+        textField.setPreferredSize(new Dimension(480, 25));
         add(textField);
     }
 
@@ -62,8 +62,8 @@ public class Console extends JDialog
                     }
                     else
                     {
-                        text += "Неизвестная команда.\n" +
-                                "Введите параметр N, где N - процент уменьшения.\n";
+                        text += "   >Неизвестная команда.\n" +
+                                "   >Введите параметр N, где N - процент уменьшения.\n";
                     }
                     textField.setText(null);
                     textArea.setText(text);

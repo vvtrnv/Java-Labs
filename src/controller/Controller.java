@@ -9,6 +9,8 @@ import model.transport.Transport;
 import model.transport.habitat.Habitat;
 import model.transport.moveAI.BikeAI;
 import model.transport.moveAI.CarAI;
+import utility.Configuration;
+import utility.Serialization;
 import view.ControlPanel;
 import view.MyField;
 import view.MyFrame;
@@ -25,6 +27,7 @@ public class Controller
     private Habitat habitat;
     private MyFrame frame;
     private ControlPanel controlPanel;
+    private Serialization serialization;
 
     private CarAI carAI;
     private BikeAI bikeAI;
@@ -42,6 +45,8 @@ public class Controller
 
         this.bikeAI = new BikeAI();
         bikeAI.start();
+
+        serialization = new Serialization();
     }
 
     public void toPaint(ArrayList<Transport> transports) { field.paintTransport(transports); }
@@ -49,13 +54,12 @@ public class Controller
     public void startBornProcess()
     {
         habitat.startBorn();
-        frame.setStartButtonProcessInMenu();
+
     }
 
     public void stopBornProcess()
     {
         habitat.stopBorn();
-        frame.setStopButtonProcessInMenu();
     }
 
     public void pauseBornProcess() {
@@ -134,38 +138,10 @@ public class Controller
             bikeAI.stopAI();
     }
 
-    public void switchTimeRadioGroupStateOff() {
-        controlPanel.switchTimeRadioGroupStateOff();
-    }
-
-    public void switchTimeRadioGroupStateOn() {
-        controlPanel.switchTimeRadioGroupStateOn();
-    }
-
-    public boolean isInfoDialogEnabled() {
-        return controlPanel.isInfoDialogEnabled();
-    }
-
     public boolean showInfoDialog() { return frame.showFinishDialog();}
 
     public void refreshField() {
         field.refreshField();
-    }
-
-    public void setStartButtonState() {
-        controlPanel.setStartButtonEnabled();
-    }
-
-    public void setStopButtonState() {
-        controlPanel.setStopButtonEnabled();
-    }
-
-    public void switchInfoRadioButtonState() {
-        controlPanel.switchInfoRadioGroupState();
-    }
-
-    public void switchDialogRadioButtonState() {
-        frame.switchDialogRadioButtonState();
     }
 
     public void showTransportsList()
@@ -184,6 +160,22 @@ public class Controller
         JOptionPane.showMessageDialog(null, new JScrollPane(panel) , "Transports", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    public void setStopButtonState() {
+        controlPanel.setStopButtonEnabled();
+    }
+
+    public void setStartButtonState() {
+        controlPanel.setStartButtonEnabled();
+    }
+
+    public void refreshTransportPopulation() {
+        habitat.refreshTransports();
+    }
+
+    public boolean isInfoDialogEnabled() {
+        return controlPanel.isInfoDialogEnabled();
+    }
+
     public void changeCarPriority(int priority)
     {
         carAI.setAIPriority(priority);
@@ -199,29 +191,43 @@ public class Controller
         TransportStorage.getInstance().reduceBikeAmount(percentage);
     }
 
+    public ArrayList<Integer> loadConfig()
+    {
+        return Configuration.loadConfig();
+    }
+    public void saveConfig()
+    {
+        Configuration.saveConfig();
+    }
+
+    public void serializeSimulation()
+    {
+        serialization.serialize();
+    }
+
+    public void deserializeSimulation()
+    {
+        serialization.deserialize();
+    }
 
     public void setN1(int N1) {
         habitat.setN1(N1);
         controlPanel.setN1(N1);
-        frame.setN1(N1);
     }
 
     public void setN2(int N2) {
         habitat.setN2(N2);
         controlPanel.setN2(N2);
-        frame.setN2(N2);
     }
 
     public void setP1(int P1) {
         habitat.setP1(P1);
         controlPanel.setP1(P1);
-        frame.setP1(P1);
     }
 
     public void setP2(int P2) {
         habitat.setP2(P2);
         controlPanel.setP2(P2);
-        frame.setP2(P2);
     }
 
     public void setD1(int D1) {

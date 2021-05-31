@@ -37,15 +37,15 @@ public class Serialization // Складирование данных в фай�
                 FileInputStream fileInputStream = new FileInputStream(file);
                 ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)
         ) {
-            TransportStorage.getInstance().reset(); //обнуляем счетчики транспорта
+            TransportStorage.getInstance().reset(); //обнуляем счетчики
 
             ArrayList<Transport> a = (ArrayList<Transport>)objectInputStream.readObject();
             TransportStorage.getInstance().setAllTransports(a);
-            ArrayList<Transport> transportsList = TransportStorage.getInstance().getTransportsList();
+            ArrayList<Transport> transportList = TransportStorage.getInstance().getTransportsList();
 
-            if (!transportsList.isEmpty()) {
-                for (int i = 0; i < transportsList.size(); i++) {
-                    Transport transport = transportsList.get(i);
+            if (!transportList.isEmpty()) {
+                for (int i = 0; i < transportList.size(); i++) {
+                    Transport transport = transportList.get(i);
                     int deathTime = transport.getDeathTime() - transport.getBirthTime();
                     transport.setBirthTime(Habitat.getGameTime());
                     transport.setDeathTime(transport.getBirthTime() + deathTime);

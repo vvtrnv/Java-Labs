@@ -1,6 +1,7 @@
 package view;
 
 import controller.Controller;
+import utility.Console;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -18,11 +19,15 @@ public class ControlPanel extends JPanel
     private JPanel timePanel;
     private JPanel carPanel;
     private JPanel bikePanel;
+    private JPanel serializerPanel;
 
     // Кнопки
     private JButton startButton = new JButton("Start");
     private JButton stopButton = new JButton("Stop");
     private JButton aliveTransportButton = new JButton("Show transports list");
+    private JButton reduceBike = new JButton("Reduce Bike");
+    private JButton loadSimulation = new JButton("Load simulation");
+    private JButton saveSimulation = new JButton("Save simulation");
 
     // Переключатели
     private JRadioButton timeOnRadioButton;
@@ -62,22 +67,51 @@ public class ControlPanel extends JPanel
                     6, 7, 8, 9, 10
             };
 
-    // Контроллер
+    // Контроллер и окно
     Controller controller;
-
+    private JFrame frame;
 
     /* Методы */
 
-    ControlPanel(int N1, int N2, int P1, int P2, int D1, int D2)
+    ControlPanel(int N1, int N2, int P1, int P2, int D1, int D2, JFrame frame)
     {
         super();
-        setLayout(new GridLayout(4, 1));
+        this.frame = frame;
+        setLayout(new GridLayout(5, 1));
         setBorder(this, "CONTROL PANEL");
 
         configureButtonsPanel();
         configureTimePanel();
         configureCarPanel(N1,P1, D1);
         configureBikePanel(N2, P2, D2);
+        reduceTransportsPanel();
+    }
+
+    private void reduceTransportsPanel()
+    {
+        serializerPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        serializerPanel.setPreferredSize((new Dimension(200,100)));
+        setBorder(serializerPanel, "Configuraion");
+
+        c.gridx = 0; c.gridy = 0; c.ipadx = 80; c.ipady = 30;
+        serializerPanel.add(reduceBike, c);
+        reduceBike.addActionListener(action->
+        {
+            Console console = new Console(frame, controller);
+            console.showConsole();
+        });
+
+
+        c.gridx = 1; c.gridy = 0; c.ipadx = 50;
+        serializerPanel.add(loadSimulation, c);
+        loadSimulation.addActionListener(actionEvent-> controller.deserializeSimulation());
+
+        c.gridx = 1; c.gridy = 1; c.ipadx = 50;
+        serializerPanel.add(saveSimulation, c);
+        saveSimulation.addActionListener(actionEvent-> controller.serializeSimulation());
+
+        add(serializerPanel);
     }
 
     // Установка названия панели
@@ -150,6 +184,7 @@ public class ControlPanel extends JPanel
                 else
                 {
                     controller.stopBornProcess();
+                    controller.refreshTransports();
                 }
             }
             else
@@ -191,10 +226,6 @@ public class ControlPanel extends JPanel
 
         // Отобразить информацию о симуляции
         dialogRadioButton = new JRadioButton("Show info", true);
-        dialogRadioButton.addActionListener(actionEvent->
-        {
-            controller.switchDialogRadioButtonState();
-        });
         timeOffRadioButton.setFocusable(false);
         timeOffRadioButton.setFocusPainted(false);
 

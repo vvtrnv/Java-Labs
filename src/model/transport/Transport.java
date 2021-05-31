@@ -2,9 +2,10 @@ package model.transport;
 
 import model.IBehaviour;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public abstract class Transport implements IBehaviour
+public abstract class Transport implements IBehaviour, Serializable
 {
     private int x;
     private int y;
