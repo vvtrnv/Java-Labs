@@ -1,5 +1,7 @@
 package model.transport;
 
+import model.transport.habitat.Habitat;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.File;
@@ -39,7 +41,7 @@ public class Car extends Transport
     public void move(int speed)
     {
         int carX = getX();
-        if(carX + speed > 800)
+        if(carX + speed > Habitat.SIZEWINDOW)
             routeX = -1;
 
         if(carX - speed < 0)

@@ -20,14 +20,22 @@ public class ControlPanel extends JPanel
     private JPanel carPanel;
     private JPanel bikePanel;
     private JPanel serializerPanel;
+    private JPanel serverClientPanel;
 
     // Кнопки
     private JButton startButton = new JButton("Start");
     private JButton stopButton = new JButton("Stop");
+
     private JButton aliveTransportButton = new JButton("Show transports list");
+
     private JButton reduceBike = new JButton("Reduce Bike");
     private JButton loadSimulation = new JButton("Load simulation");
     private JButton saveSimulation = new JButton("Save simulation");
+
+    private JButton openNetwork = new JButton("Open network");
+    private JButton closeNetwork = new JButton("Close network");
+    private JButton sendSettings = new JButton("Send settings");
+    private JButton showActiveClients = new JButton("Clients");
 
     // Переключатели
     private JRadioButton timeOnRadioButton;
@@ -77,7 +85,7 @@ public class ControlPanel extends JPanel
     {
         super();
         this.frame = frame;
-        setLayout(new GridLayout(5, 1));
+        setLayout(new GridLayout(6, 1));
         setBorder(this, "CONTROL PANEL");
 
         configureButtonsPanel();
@@ -85,6 +93,7 @@ public class ControlPanel extends JPanel
         configureCarPanel(N1,P1, D1);
         configureBikePanel(N2, P2, D2);
         reduceTransportsPanel();
+        serverPanel();
     }
 
     private void reduceTransportsPanel()
@@ -636,6 +645,62 @@ public class ControlPanel extends JPanel
     public boolean isInfoDialogEnabled()
     {
         return dialogRadioButton.isSelected();
+    }
+
+    public void serverPanel()
+    {
+        serverClientPanel = new JPanel(new GridBagLayout());
+        setBorder(serverClientPanel, "Network");
+        GridBagConstraints c = new GridBagConstraints();
+        serverClientPanel.setBackground(Color.decode("#C1C1C1"));
+
+        c.gridx = 0; c.gridy = 0; c.ipadx = 50;
+        serverClientPanel.add(openNetwork, c);
+
+        c.gridx = 1; c.gridy = 0; c.ipadx = 50;
+        serverClientPanel.add(closeNetwork, c);
+
+        c.gridx = 0; c.gridy = 1; c.ipadx = 50;
+        serverClientPanel.add(sendSettings, c);
+
+        c.gridx = 1; c.gridy = 1; c.ipadx = 50;
+        serverClientPanel.add(showActiveClients, c);
+
+        serverClientPanel.setVisible(true);
+        add(serverClientPanel);
+
+        openNetwork.setEnabled(true);
+        closeNetwork.setEnabled(false);
+
+        closeNetwork.addActionListener(listener->
+        {
+            openNetwork.setEnabled(true);
+            closeNetwork.setEnabled(false);
+        });
+
+        openNetwork.addActionListener(action->
+        {
+            controller.work();
+            openNetwork.setEnabled(false);
+            closeNetwork.setEnabled(true);
+        });
+
+        showActiveClients.addActionListener(action->
+        {
+            controller.showClientsDialog();
+        });
+
+        closeNetwork.addActionListener(action->
+        {
+            controller.stopWork();
+            openNetwork.setEnabled(true);
+            closeNetwork.setEnabled(false);
+        });
+
+        sendSettings.addActionListener(action->
+        {
+            controller.sendFile();
+        });
     }
 
     public void setN1(int N1)

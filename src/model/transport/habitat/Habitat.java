@@ -24,7 +24,7 @@ public class Habitat
     private static int D2;
 
     // Размер окна
-    final public int SIZEWINDOW = 800;
+    public static final int SIZEWINDOW = 900;
 
     // Путь к файлам
     final private String pathToCar = "src/resources/car.png";

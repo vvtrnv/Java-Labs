@@ -9,6 +9,8 @@ import model.transport.Transport;
 import model.transport.habitat.Habitat;
 import model.transport.moveAI.BikeAI;
 import model.transport.moveAI.CarAI;
+import server.TCPConnection;
+import server.TCPConnectionListener;
 import utility.Configuration;
 import utility.Serialization;
 import view.ControlPanel;
@@ -17,11 +19,14 @@ import view.MyFrame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.TreeMap;
 
-public class Controller
+public class Controller implements TCPConnectionListener
 {
     private MyField field;
     private Habitat habitat;
@@ -31,6 +36,9 @@ public class Controller
 
     private CarAI carAI;
     private BikeAI bikeAI;
+
+    private TCPConnection connection;
+    private ArrayList<String> clients;
 
     // Конструктор класса
     public Controller(MyField myField, Habitat habitat, MyFrame myframe, ControlPanel controlPanel)
@@ -209,6 +217,32 @@ public class Controller
     {
         serialization.deserialize();
     }
+    //!!!!!!!!
+    public void work()
+    {
+        try
+        {
+            connection = new TCPConnection(this, TCPConnection.IP_ADDRESS, TCPConnection.PORT);
+        }
+        catch (IOException e)
+        {
+            connection.disconnect();
+            clients = null;
+        }
+    }
+    //!!!!!!!!!!!!!
+    public void stopWork()
+    {
+        connection.disconnect();
+        clients = null;
+    }
+
+    //!!!!!!!!!!!!
+    public void sendFile()
+    {
+        Configuration.saveConfig();
+        connection.sendObject(Configuration.getConfigFile());
+    }
 
     public void setN1(int N1) {
         habitat.setN1(N1);
@@ -237,6 +271,76 @@ public class Controller
     public void setD2(int D2) {
         habitat.setD2(D2);
         controlPanel.setD2(D2);
+    }
+
+    public void showClientsDialog()
+    {
+        if (clients != null) {
+            JPanel panel = new JPanel(new GridLayout(1, 1));
+            JTextArea area = new JTextArea(6, 25);
+            area.setEditable(false);
+
+            for (String client : clients) {
+                area.append(client + "\n");
+            }
+            panel.add(area);
+            JOptionPane.showMessageDialog(null, new JScrollPane(panel), "Info", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    // Устанавливает переданные параметры от клиента к клиенту
+    @Override
+    public void onReceiveObject(TCPConnection tcpConnection, Object object)
+    {
+        if(object instanceof TCPConnection.BoxUsers)
+        {
+            clients = ((TCPConnection.BoxUsers)object).users;
+        }
+        if(object instanceof File)
+        {
+            System.out.println("File");
+            System.out.println(((File)object).getName());
+            ArrayList<Integer> parameters = new ArrayList<>();
+
+            try(Scanner scanner = new Scanner((File)object))
+            {
+                while (scanner.hasNextLine())
+                {
+                    String string = scanner.nextLine();
+                    System.out.println(string);
+                    Scanner intScanner = new Scanner(string);
+                    parameters.add(intScanner.nextInt());
+                }
+            }
+            catch (IOException e)
+            {
+                System.err.println("Errror: something went wrong while loading config");
+            }
+
+            for(int i : parameters)
+                System.err.println(i);
+
+            setN1(parameters.get(0));
+            setP1(parameters.get(1));
+            setN2(parameters.get(2));
+            setP2(parameters.get(3));
+            setD1(parameters.get(4));
+            setD2(parameters.get(5));
+        }
+    }
+
+    @Override
+    public void onConnectionReady(TCPConnection tcpConnection)
+    {
+
+    }
+    @Override
+    public void onDisconnect(TCPConnection tcpConnection) {
+
+    }
+    @Override
+    public void onException(TCPConnection tcpConnection, Exception e) {
+
     }
 
 }

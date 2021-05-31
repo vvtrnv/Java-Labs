@@ -52,5 +52,10 @@ public class Configuration
 
         return parameters;
     }
+
+    public static File getConfigFile()
+    {
+        return configFile;
+    }
 }
 
