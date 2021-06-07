@@ -17,8 +17,8 @@ public class Car extends Transport
     static
     {
         try {
-            image_right = ImageIO.read(new File("src/resources/car_left.png"));
-            image_left = ImageIO.read(new File("src/resources/car_right.png"));
+            image_left = ImageIO.read(new File("src/resources/car_left.png"));
+            image_right = ImageIO.read(new File("src/resources/car_right.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -36,8 +36,7 @@ public class Car extends Transport
 
         Random random = new Random();
 
-        setY(random.nextInt(360) + 200);
-
+        setY(random.nextInt(340) + 200);
 
         // Рандомное направление движения
 
@@ -45,29 +44,29 @@ public class Car extends Transport
         if(route == 0)
         {
             routeX = 1;
-            setImage(image_left);
+            setImage(image_right);
         }
         else
         {
             routeX = -1;
-            setImage(image_right);
+            setImage(image_left);
         }
     }
 
     public void move(int speed)
     {
         int carX = getX();
-        if(carX + speed > 800)
+        if(carX + speed > 680)
         {
             routeX = -1;
-            setImage(image_right);
+            setImage(image_left);
         }
 
 
         if(carX - speed < 0)
         {
             routeX = 1;
-            setImage(image_left);
+            setImage(image_right);
         }
 
         this.setX(carX + speed * routeX);

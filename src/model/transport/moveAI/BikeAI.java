@@ -1,5 +1,6 @@
 package model.transport.moveAI;
 
+import controller.Controller;
 import model.TransportStorage;
 import model.transport.Bike;
 
@@ -11,7 +12,11 @@ import java.util.TimerTask;
 
 public class BikeAI extends BaseAI
 {
-    public BikeAI(){}
+    private Controller controller;
+    public BikeAI(Controller controller)
+    {
+        this.controller = controller;
+    }
 
     public synchronized void run()
     {
@@ -19,9 +24,11 @@ public class BikeAI extends BaseAI
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                TransportStorage storage = TransportStorage.getInstance();
+                controller.toPaint(storage.getTransportsList());
                 update();
             }
-        }, 0, 80);
+        }, 0, 15);
     }
 
     void update()

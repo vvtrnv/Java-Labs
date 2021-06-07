@@ -22,7 +22,7 @@ public class CarAI extends BaseAI
             public void run() {
                 update();
             }
-        }, 0, 100);
+        }, 0, 15);
     }
 
     void update()

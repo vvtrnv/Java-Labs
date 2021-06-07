@@ -37,6 +37,9 @@ public class Bike extends Transport
         countAllTransports++;
 
         Random random = new Random();
+
+        setX(random.nextInt(430) + 230);
+
         int route = random.nextInt(2);
         if(route == 0)
         {
@@ -53,7 +56,7 @@ public class Bike extends Transport
     public void move(int speed)
     {
         int bikeY = this.getY();
-        if(bikeY + speed > 700)
+        if(bikeY + speed > 630)
         {
             routeY = -1;
             setImage(image_up);

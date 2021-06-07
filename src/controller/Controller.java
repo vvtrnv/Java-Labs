@@ -43,7 +43,7 @@ public class Controller
         this.carAI = new CarAI();
         carAI.start();
 
-        this.bikeAI = new BikeAI();
+        this.bikeAI = new BikeAI(this);
         bikeAI.start();
 
         serialization = new Serialization();

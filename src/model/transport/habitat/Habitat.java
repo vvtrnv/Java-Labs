@@ -111,7 +111,7 @@ public class Habitat// implements Runnable
 
 
         storage.removeTransport(time);
-        controller.toPaint(storage.getTransportsList());
+        //controller.toPaint(storage.getTransportsList());
     }
 
     // Начало симуляции

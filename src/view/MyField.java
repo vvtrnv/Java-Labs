@@ -26,7 +26,7 @@ public class MyField extends JPanel
     static
     {
         try {
-            background_img = ImageIO.read(new File("src/resources/background2.png"));
+            background_img = ImageIO.read(new File("src/resources/background.png"));
 
         } catch (IOException e) {
             e.printStackTrace();
