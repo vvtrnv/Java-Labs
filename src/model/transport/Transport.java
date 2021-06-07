@@ -2,6 +2,7 @@ package model.transport;
 
 import model.IBehaviour;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -10,25 +11,30 @@ public abstract class Transport implements IBehaviour, Serializable
     private int x;
     private int y;
     public static int countAllTransports = 0;
-    private String pathToImg;
 
     private String  uuid;
     private int birthTime;
     private int deathTime;
 
+    private Image image;
+
     // Конструктор
-    Transport(int X, int Y, String path, int birthTime, int deathTime)
+    Transport(int X, int Y, Image img, int birthTime, int deathTime)
     {
         this.x = X;
         this.y = Y;
-        this.pathToImg = path;
-
+        this.image = img;
         this.birthTime = birthTime;
         this.deathTime = deathTime;
         this.uuid = UUID.randomUUID().toString();
     }
 
-    public String getPathToImg() { return pathToImg; }
+    public Image getImage() { return image; }
+
+    public void setImage(Image img)
+    {
+        this.image = img;
+    }
 
     public String getUuid() {
         return uuid;

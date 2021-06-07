@@ -9,7 +9,7 @@ import view.MyFrame;
 import java.util.ArrayList;
 import java.util.Timer;
 
-public class Habitat
+public class Habitat// implements Runnable
 {
     /*
     * СВОЙСТВА ОБЪЕКТА
@@ -42,6 +42,7 @@ public class Habitat
     MyFrame myframe;
     BornProcess bornProcess = new BornProcess(this);
 
+
     /*
     * МЕТОДЫ КЛАССА
     * */
@@ -73,6 +74,8 @@ public class Habitat
         int probability = (int)(Math.random() * 100 + 1);
         return probability <= probBike && time % tmBike == 0;
     }
+
+
 
     // Обновление по таймеру
     public void update(int time)
