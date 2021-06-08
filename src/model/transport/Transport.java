@@ -16,7 +16,9 @@ public abstract class Transport implements IBehaviour, Serializable
     private int birthTime;
     private int deathTime;
 
+    private int route;
     private Image image;
+
 
     // Конструктор
     Transport(int X, int Y, Image img, int birthTime, int deathTime)
@@ -57,6 +59,17 @@ public abstract class Transport implements IBehaviour, Serializable
     {
         this.deathTime = deathTime;
     }
+
+    public int getRoute()
+    {
+        return route;
+    }
+
+    public void setRoute(int route)
+    {
+        this.route = route;
+    }
+
     // Переопределение функций из интерфейса
     @Override
     public int getX() { return this.x; }

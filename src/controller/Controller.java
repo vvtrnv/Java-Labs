@@ -10,6 +10,7 @@ import model.transport.habitat.Habitat;
 import model.transport.moveAI.BikeAI;
 import model.transport.moveAI.CarAI;
 import utility.Configuration;
+import utility.DataBaseController;
 import utility.Serialization;
 import view.ControlPanel;
 import view.MyField;
@@ -17,6 +18,7 @@ import view.MyFrame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.TreeMap;
@@ -208,6 +210,59 @@ public class Controller
     public void deserializeSimulation()
     {
         serialization.deserialize();
+    }
+
+    public void saveConfigDataBase()
+    {
+        try {
+            DataBaseController.saveConfigToDataBase();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadConfigDataBase()
+    {
+        try
+        {
+            ArrayList<Integer> params = DataBaseController.loadConfigFromDataBase();
+            setN1(params.get(0));
+            setP1(params.get(1));
+            setN2(params.get(2));
+            setP2(params.get(3));
+            setD1(params.get(4));
+            setD2(params.get(5));
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveRoadDataBase()
+    {
+        try
+        {
+            DataBaseController.saveTransportsToBD();
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadRoadDataBase()
+    {
+        try
+        {
+            DataBaseController.loadTransportsFromBD();
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void setN1(int N1) {

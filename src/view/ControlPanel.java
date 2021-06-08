@@ -19,15 +19,21 @@ public class ControlPanel extends JPanel
     private JPanel timePanel;
     private JPanel carPanel;
     private JPanel bikePanel;
-    private JPanel serializerPanel;
+    //private JPanel serializerPanel;
+    private JPanel dataBasePanel;
 
     // Кнопки
     private JButton startButton = new JButton("Start");
     private JButton stopButton = new JButton("Stop");
     private JButton aliveTransportButton = new JButton("Show transports list");
     private JButton reduceBike = new JButton("Reduce Bike");
-    private JButton loadSimulation = new JButton("Load simulation");
-    private JButton saveSimulation = new JButton("Save simulation");
+    //private JButton loadSimulation = new JButton("Load simulation");
+    //private JButton saveSimulation = new JButton("Save simulation");
+    private JButton saveConfigToDB = new JButton("Save config(DB)");
+    private JButton loadConfigFromDB = new JButton("Load config(DB)");
+    private JButton saveSimulationToDB = new JButton("Save simulation(DB)");
+    private JButton loadSimulationFromDB = new JButton("Load simulation(DB)");
+
 
     // Переключатели
     private JRadioButton timeOnRadioButton;
@@ -84,34 +90,75 @@ public class ControlPanel extends JPanel
         configureTimePanel();
         configureCarPanel(N1,P1, D1);
         configureBikePanel(N2, P2, D2);
-        reduceTransportsPanel();
+        //reduceTransportsPanel();
+        configuredataBasePanel();
     }
 
-    private void reduceTransportsPanel()
-    {
-        serializerPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        serializerPanel.setPreferredSize((new Dimension(200,100)));
-        setBorder(serializerPanel, "Configuraion");
+//    private void reduceTransportsPanel()
+//    {
+//        serializerPanel = new JPanel(new GridBagLayout());
+//        GridBagConstraints c = new GridBagConstraints();
+//        serializerPanel.setPreferredSize((new Dimension(200,100)));
+//        setBorder(serializerPanel, "Configuraion");
+//
+//        c.gridx = 0; c.gridy = 0; c.ipadx = 80; c.ipady = 30;
+//        serializerPanel.add(reduceBike, c);
+//        reduceBike.addActionListener(action->
+//        {
+//            Console console = new Console(frame, controller);
+//            console.showConsole();
+//        });
+//
+//
+//        c.gridx = 1; c.gridy = 0; c.ipadx = 50;
+//        serializerPanel.add(loadSimulation, c);
+//        loadSimulation.addActionListener(actionEvent-> controller.deserializeSimulation());
+//
+//        c.gridx = 1; c.gridy = 1; c.ipadx = 50;
+//        serializerPanel.add(saveSimulation, c);
+//        saveSimulation.addActionListener(actionEvent-> controller.serializeSimulation());
+//
+//        add(serializerPanel);
+//    }
 
-        c.gridx = 0; c.gridy = 0; c.ipadx = 80; c.ipady = 30;
-        serializerPanel.add(reduceBike, c);
-        reduceBike.addActionListener(action->
+    private void configuredataBasePanel()
+    {
+        dataBasePanel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        dataBasePanel.setPreferredSize(new Dimension(200, 100));
+        setBorder(dataBasePanel, "Data Base");
+
+        // Конфиг
+        c.gridx = 0; c.gridy = 0; c.ipadx = 50; c.ipady = 20;
+        dataBasePanel.add(saveConfigToDB, c);
+        saveConfigToDB.addActionListener(action->
         {
-            Console console = new Console(frame, controller);
-            console.showConsole();
+            controller.saveConfigDataBase();
         });
 
+        c.gridx = 0; c.gridy = 1;
+        dataBasePanel.add(loadConfigFromDB, c);
+        loadConfigFromDB.addActionListener(action->
+        {
+            controller.loadConfigDataBase();
+        });
 
-        c.gridx = 1; c.gridy = 0; c.ipadx = 50;
-        serializerPanel.add(loadSimulation, c);
-        loadSimulation.addActionListener(actionEvent-> controller.deserializeSimulation());
+        // Симуляция
+        c.gridx = 1; c.gridy = 0;
+        dataBasePanel.add(saveSimulationToDB, c);
+        saveSimulationToDB.addActionListener(action->
+        {
+            controller.saveRoadDataBase();
+        });
 
-        c.gridx = 1; c.gridy = 1; c.ipadx = 50;
-        serializerPanel.add(saveSimulation, c);
-        saveSimulation.addActionListener(actionEvent-> controller.serializeSimulation());
+        c.gridx = 1; c.gridy = 1;
+        dataBasePanel.add(loadSimulationFromDB, c);
+        loadSimulationFromDB.addActionListener(action->
+        {
+            controller.loadRoadDataBase();
+        });
 
-        add(serializerPanel);
+        add(dataBasePanel);
     }
 
     // Установка названия панели
