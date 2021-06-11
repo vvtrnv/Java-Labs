@@ -2,10 +2,14 @@ package view;
 
 import controller.Controller;
 import model.transport.habitat.Habitat;
+import utility.Music;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 // Окно JFrame
@@ -145,6 +149,13 @@ public class MyFrame extends JFrame implements KeyListener
         // Задаём параметры JLabel для поля времени
         timeLabel = new JLabel("",SwingConstants.CENTER);
         add(timeLabel,BorderLayout.SOUTH);
+
+        try{
+            Music.playSound("src/resources/backgroundMusic.wav");
+        }catch (LineUnavailableException | IOException |UnsupportedAudioFileException e)
+        {
+            e.printStackTrace();
+        }
 
         // Расположение окна, его видимость и т.д
         pack();

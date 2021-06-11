@@ -11,6 +11,7 @@ import model.transport.moveAI.BikeAI;
 import model.transport.moveAI.CarAI;
 import utility.Configuration;
 import utility.DataBaseController;
+import utility.Music;
 import utility.Serialization;
 import view.ControlPanel;
 import view.MyField;
@@ -56,7 +57,6 @@ public class Controller
     public void startBornProcess()
     {
         habitat.startBorn();
-
     }
 
     public void stopBornProcess()
